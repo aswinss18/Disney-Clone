@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import {
   selectUserName,
   selectUserPhoto,
+  setSignOutState,
   setUserLoginDetails,
 } from "../features/user/userSlice";
 
@@ -24,14 +25,25 @@ export default function Header() {
   }, [username]);
 
   const handleAuth = () => {
-    auth
-      .signInWithPopup(provider)
-      .then((result) => {
-        setUser(result.user);
-      })
-      .catch((error) => {
-        alert(error.message);
-      });
+    if (!username) {
+      auth
+        .signInWithPopup(provider)
+        .then((result) => {
+          setUser(result.user);
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    } else if (username) {
+      auth
+        .signOut()
+        .then(() => {
+          dispatch(setSignOutState());
+
+          navigate("/");
+        })
+        .catch((err) => alert(err.message));
+    }
   };
 
   const setUser = (user) => {
@@ -80,7 +92,12 @@ export default function Header() {
               <span>SERIES</span>
             </a>
           </NavMenu>
-          <UserImg src={userphoto} />
+          <SignOut>
+            <UserImg src={userphoto} />
+            <DropDown>
+              <span onClick={handleAuth}>Sign out</span>
+            </DropDown>
+          </SignOut>
         </>
       )}
     </Nav>
@@ -195,4 +212,35 @@ const Login = styled.a`
 
 const UserImg = styled.img`
   height: 100%;
+  border-radius: 50%;
+  width: 100%;
+`;
+const DropDown = styled.div`
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: rgb(19, 19, 19);
+  border: 1px solid rgba (151, 151, 151, 0.34);
+  border-radius: 4px;
+  box-shadow: rgb(0 0 0/50%) 0 0 18px 0;
+  padding: 10px;
+  font-size: 14px;
+  letter-spacing: 3px;
+  width: 100px;
+  opacity: 0;
+`;
+const SignOut = styled.div`
+  position: relative;
+  height: 48px;
+  width: 48px;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    ${DropDown} {
+      opacity: 1;
+      transition-duration: 1s;
+    }
+  }
 `;
