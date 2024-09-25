@@ -2,12 +2,20 @@ import styled from "styled-components";
 import React from "react";
 import ImageSlider from "./ImageSlider";
 import Viewers from "./Viewers";
+import Recommends from "./Recommends";
+import NewDisney from "./NewDisney";
+import Originals from "./Originals";
+import Trending from "./Trending";
 
 export default function Home() {
   return (
     <Container>
       <ImageSlider />
       <Viewers />
+      <Recommends />
+      <NewDisney />
+      <Originals />
+      <Trending />
     </Container>
   );
 }
