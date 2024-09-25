@@ -1,39 +1,31 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { selectOriginal, selectTrending } from "../features/movie/movieSlice";
+import { useSelector } from "react-redux";
 
-export default function Trending() {
+export default function Originals() {
+  const movies = useSelector(selectTrending);
+
   return (
     <Container>
       <h4>Trending</h4>
       <Content>
-        <Wrap>
-          <Link to="/">
-            <img src="/images/cta-logo-one.svg" alt="" />
-          </Link>
-        </Wrap>{" "}
-        <Wrap>
-          <Link to="/">
-            <img src="/images/cta-logo-one.svg" alt="" />
-          </Link>
-        </Wrap>{" "}
-        <Wrap>
-          <Link to="/">
-            <img src="/images/cta-logo-one.svg" alt="" />
-          </Link>
-        </Wrap>{" "}
-        <Wrap>
-          <Link to="/">
-            <img src="/images/cta-logo-one.svg" alt="" />
-          </Link>
-        </Wrap>
+        {movies &&
+          movies.map((movie, i) => (
+            <Wrap key={movie.id}>
+              <Link to={"/detail/" + movie.id}>
+                <img src={movie.cardImg} alt={movie.title} />
+              </Link>
+            </Wrap>
+          ))}
       </Content>
     </Container>
   );
 }
 
 const Content = styled.div`
-  display: flex;
+  display: grid;
   grid-gap: 25px;
   gap: 25px;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -48,7 +40,6 @@ const Container = styled.div`
 `;
 
 const Wrap = styled.div`
-  padding-top: 56.25%;
   border-radius: 10px;
   box-shadow: rgb(0 0 0/69%) 0 26px 30px --10px,
     rgb(0 0 0/73%) 0 16px 10px -10px;

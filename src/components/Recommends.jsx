@@ -6,7 +6,6 @@ import { selectRecommend } from "../features/movie/movieSlice";
 
 export default function Recommends() {
   const movies = useSelector(selectRecommend);
-  console.log(JSON.stringify(movies, null, 2));
 
   return (
     <Container>
